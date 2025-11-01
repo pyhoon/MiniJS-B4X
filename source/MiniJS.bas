@@ -16,7 +16,13 @@ End Sub
 
 ' Generate the complete JavaScript code
 Public Sub Generate As String
-    Return jsCode.ToString
+    'Return jsCode.ToString
+    Dim scriptBuilder As StringBuilder
+	scriptBuilder.Initialize
+	scriptBuilder.Append("<script>")
+	scriptBuilder.Append(GetIndent).Append(jsCode)
+	scriptBuilder.Append("</script>")
+	Return scriptBuilder.ToString
 End Sub
 
 ' Add a line of JavaScript code
@@ -43,6 +49,10 @@ Public Sub AddMultiLineComment (comment As String)
         AddLine(" * " & line)
     Next
     AddLine(" */")
+End Sub
+
+Public Sub AddConditionalCall(condition As String, call As String)
+    AddLine($"if (${condition}) ${call}"$)
 End Sub
 
 Private Sub GetIndent As String
@@ -106,6 +116,48 @@ Public Sub EndForLoop
     AddLine("}")
 End Sub
 
+Public Sub StartCondition(condition As String) As MiniJS
+    AddLine($"if (${condition}) {"$)
+    currentIndent = currentIndent + 1
+    Return Me
+End Sub
+
+Public Sub AddMethodCall (objectName As String, methodName As String, args() As String) As MiniJS
+    Dim argList As String
+	For Each arg As String In args
+		If argList <> "" Then argList = argList & ", "
+		argList = argList & arg
+	Next	
+    AddLine($"${objectName}.${methodName}(${argList});"$)
+    Return Me
+End Sub
+
+Public Sub EndCondition As MiniJS
+    currentIndent = currentIndent - 1
+    AddLine("}")
+    Return Me
+End Sub
+
+Public Sub AddFunctionCall (functionName As String, args() As String)
+	Dim argList As String
+	For Each arg As String In args
+		If argList <> "" Then argList = argList & ", "
+		If ShouldQuote(arg) Then
+			argList = argList & $"'${arg}'"$
+		Else
+			argList = argList & arg
+		End If
+	Next
+	AddLine($"${functionName}(${argList});"$)
+End Sub
+
+Private Sub ShouldQuote (arg As String) As Boolean
+	' Check if argument should be quoted (simple string detection)
+	Return arg.StartsWith("'") = False And arg.StartsWith(QUOTE) = False And _
+           IsNumber(arg) = False And arg <> "true" And arg <> "false" And _
+           arg <> "null" And arg <> "undefined"
+End Sub
+
 ' Declare a variable
 Public Sub DeclareVariable (name As String, value As String, isConst As Boolean)
     Dim decl As String
@@ -152,3 +204,4 @@ Public Sub CreateArray (name As String, items As List)
     
     AddLine($"const ${name} = ${itemsStr};"$)
 End Sub
+
