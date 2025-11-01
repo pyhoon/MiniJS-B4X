@@ -5,10 +5,150 @@ Type=Class
 Version=10.3
 @EndOfDesignText@
 Sub Class_Globals
-	
+    Private jsCode As StringBuilder
+    Private currentIndent As Int
 End Sub
 
-'Initializes the object. You can add parameters to this method if needed.
 Public Sub Initialize
-	
+    jsCode.Initialize
+    currentIndent = 0
+End Sub
+
+' Generate the complete JavaScript code
+Public Sub Generate As String
+    Return jsCode.ToString
+End Sub
+
+' Add a line of JavaScript code
+Public Sub AddLine (code As String)
+    Dim indentStr As String = GetIndent
+    jsCode.Append(indentStr).Append(code).Append(CRLF)
+End Sub
+
+' Add raw code without formatting
+Public Sub AddCode (code As String)
+    jsCode.Append(code)
+End Sub
+
+' Add a comment
+Public Sub AddComment (comment As String)
+    AddLine("// " & comment)
+End Sub
+
+' Add multi-line comment
+Public Sub AddMultiLineComment (comment As String)
+    AddLine("/*")
+    Dim lines() As String = Regex.Split(CRLF, comment)
+    For Each line As String In lines
+        AddLine(" * " & line)
+    Next
+    AddLine(" */")
+End Sub
+
+Private Sub GetIndent As String
+    Dim sb As StringBuilder
+    sb.Initialize
+    For i = 0 To currentIndent - 1
+        sb.Append("    ") ' 4 spaces per indent
+    Next
+    Return sb.ToString
+End Sub
+
+' Start a function
+Public Sub StartFunction (name As String, parameters() As String)
+	Dim paramList As String
+	'paramList = ",".Join(parameters)
+	For Each prm As String In parameters
+		If paramList <> "" Then paramList = paramList & ", "
+		paramList = paramList & prm
+	Next
+	AddLine($"function ${name} (${paramList}) {"$)
+	currentIndent = currentIndent + 1
+End Sub
+
+' End a function
+Public Sub EndFunction
+    currentIndent = currentIndent - 1
+    AddLine("}")
+End Sub
+
+' If statement
+Public Sub StartIf (condition As String)
+    AddLine($"if (${condition}) {"$)
+    currentIndent = currentIndent + 1
+End Sub
+
+Public Sub ElseIf (condition As String)
+    currentIndent = currentIndent - 1
+    AddLine($"} else if (${condition}) {"$)
+    currentIndent = currentIndent + 1
+End Sub
+
+Public Sub Else
+    currentIndent = currentIndent - 1
+    AddLine("} else {")
+    currentIndent = currentIndent + 1
+End Sub
+
+Public Sub EndIf
+    currentIndent = currentIndent - 1
+    AddLine("}")
+End Sub
+
+' For loop
+Public Sub StartForLoop (initializer As String, condition As String, increment As String)
+    AddLine($"for (${initializer}; ${condition}; ${increment}) {"$)
+    currentIndent = currentIndent + 1
+End Sub
+
+Public Sub EndForLoop
+    currentIndent = currentIndent - 1
+    AddLine("}")
+End Sub
+
+' Declare a variable
+Public Sub DeclareVariable (name As String, value As String, isConst As Boolean)
+    Dim decl As String
+    If isConst Then
+        decl = "const"
+    Else
+        decl = "let"
+    End If
+    
+    If value <> "" Then
+        AddLine($"${decl} ${name} = ${value};"$)
+    Else
+        AddLine($"${decl} ${name};"$)
+    End If
+End Sub
+
+' Create an object
+Public Sub CreateObject (name As String, properties As Map)
+    AddLine($"const ${name} = {"$)
+    currentIndent = currentIndent + 1
+    
+    Dim keys As List = properties.Keys
+    For i = 0 To keys.Size - 1
+        Dim key As String = keys.Get(i)
+        Dim value As String = properties.Get(key)
+        Dim lineEnd As String = ","
+        If i = keys.Size - 1 Then lineEnd = ""
+        
+        AddLine($"${key}: ${value}${lineEnd}"$)
+    Next
+    
+    currentIndent = currentIndent - 1
+    AddLine("};")
+End Sub
+
+' Create an array
+Public Sub CreateArray (name As String, items As List)
+    Dim itemsStr As String = "["
+    For i = 0 To items.Size - 1
+        itemsStr = itemsStr & items.Get(i)
+        If i < items.Size - 1 Then itemsStr = itemsStr & ", "
+    Next
+    itemsStr = itemsStr & "]"
+    
+    AddLine($"const ${name} = ${itemsStr};"$)
 End Sub
