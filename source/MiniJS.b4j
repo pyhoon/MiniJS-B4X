@@ -2,7 +2,7 @@
 Build1=Default,b4j.example
 Group=Default Group
 Library1=jcore
-Module1=MiniJS
+Module1=MiniJs
 NumberOfFiles=0
 NumberOfLibraries=1
 NumberOfModules=1
