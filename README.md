@@ -1,3 +1,3 @@
 # MiniJS-B4X
 
-Generate HTML from B4X code
+Generate JS from B4X code
