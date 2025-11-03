@@ -123,13 +123,15 @@ Public Sub StartCondition(condition As String) As MiniJS
 End Sub
 
 Public Sub AddMethodCall (objectName As String, methodName As String, args() As String) As MiniJS
-    Dim argList As String
-	For Each arg As String In args
-		If argList <> "" Then argList = argList & ", "
-		argList = argList & arg
-	Next	
-    AddLine($"${objectName}.${methodName}(${argList});"$)
-    Return Me
+	Dim argList As String
+	If Initialized(args) Then
+		For Each arg As String In args
+			If argList <> "" Then argList = argList & ", "
+			argList = argList & arg
+		Next
+	End If
+	AddLine($"${objectName}.${methodName}(${argList});"$)
+	Return Me
 End Sub
 
 Public Sub EndCondition As MiniJS
@@ -140,14 +142,16 @@ End Sub
 
 Public Sub AddFunctionCall (functionName As String, args() As String)
 	Dim argList As String
-	For Each arg As String In args
-		If argList <> "" Then argList = argList & ", "
-		If ShouldQuote(arg) Then
-			argList = argList & $"'${arg}'"$
-		Else
-			argList = argList & arg
-		End If
-	Next
+	If Initialized(args) Then
+		For Each arg As String In args
+			If argList <> "" Then argList = argList & ", "
+			If ShouldQuote(arg) Then
+				argList = argList & $"'${arg}'"$
+			Else
+				argList = argList & arg
+			End If
+		Next
+	End If
 	AddLine($"${functionName}(${argList});"$)
 End Sub
 
@@ -204,4 +208,3 @@ Public Sub CreateArray (name As String, items As List)
     
     AddLine($"const ${name} = ${itemsStr};"$)
 End Sub
-
