@@ -25,6 +25,15 @@ Public Sub Generate As String
 	Return scriptBuilder.ToString
 End Sub
 
+' Generate the complete JavaScript code without script tag
+Public Sub Generate2 As String
+    'Return jsCode.ToString
+    Dim scriptBuilder As StringBuilder
+	scriptBuilder.Initialize
+	scriptBuilder.Append(GetIndent).Append(jsCode)
+	Return scriptBuilder.ToString
+End Sub
+
 ' Add a line of JavaScript code
 Public Sub AddLine (code As String)
     Dim indentStr As String = GetIndent
@@ -64,6 +73,14 @@ Private Sub GetIndent As String
     Return sb.ToString
 End Sub
 
+Public Sub IncreaseIndent
+	currentIndent = currentIndent + 1
+End Sub
+
+Public Sub DecreaseIndent
+	currentIndent = currentIndent - 1
+End Sub
+
 ' Start a function
 Public Sub StartFunction (name As String, parameters() As String)
 	Dim paramList As String
@@ -94,7 +111,7 @@ Public Sub ElseIf (condition As String)
     currentIndent = currentIndent + 1
 End Sub
 
-Public Sub Else
+Public Sub AddElse
     currentIndent = currentIndent - 1
     AddLine("} else {")
     currentIndent = currentIndent + 1

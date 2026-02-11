@@ -56,7 +56,7 @@ Private Sub GenerateSampleFunction
     jsGen.StartIf("taxRate > 0")
     jsGen.DeclareVariable("tax", "subtotal * taxRate", True)
     jsGen.AddLine("return subtotal + tax;")
-    jsGen.Else
+    jsGen.AddElse
     jsGen.AddLine("return subtotal;")
     jsGen.EndIf
     
