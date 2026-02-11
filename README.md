@@ -1,3 +1,3 @@
-# MiniJs-B4X
+# MiniJS-B4X
 
 Generate JS from B4X code
