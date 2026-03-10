@@ -2,11 +2,11 @@
 Build1=Default,b4j.example
 Group=App
 Library1=jcore
-Module1=MiniJs
+Module1=MiniJS
 NumberOfFiles=0
 NumberOfLibraries=1
 NumberOfModules=1
-Version=10.3
+Version=10.45
 @EndOfDesignText@
 'Non-UI application (console / server application)
 #Region Project Attributes 
@@ -15,17 +15,17 @@ Version=10.3
 #End Region
 #Region Macros
 '#Macro: Title, Export as zip, ide://run?file=%B4X%\Zipper.jar&Args=%PROJECT_NAME%.zip
-#Macro: Title, Update Manifest, ide://run?file=%JAVABIN%\java.exe&Args=-jar&Args=%ADDITIONAL%\..\B4X\manifest-writer.jar&Args=%PROJECT%&Args=%PROJECT%&Args=Author&Args=Aeric&Args=Version&Args=0.50
-'#Macro: Title, Create B4xLib, ide://run?file=%JAVABIN%\jar.exe&WorkingDirectory=..&args=-cMf&args=..\release\%PROJECT_NAME%.b4xlib&args=Snippets&args=*.bas&args=manifest.txt&args=LICENSE
-'#Macro: Title, Release folder, ide://run?file=%WINDIR%\SysWOW64\explorer.exe&Args=%PROJECT%\..\release
-'#Macro: Title, Copy to AddLibs, ide://run?file=%COMSPEC%&args=/c&args=copy&args=%PROJECT%\..\release\*.b4xlib&args=%ADDITIONAL%\..\B4X
-#Macro: Title, Create B4xLib, ide://run?file=%JAVABIN%\jar.exe&WorkingDirectory=..&args=-cMf&args=..\prerelease\%PROJECT_NAME%.b4xlib&args=Snippets&args=*.bas&args=manifest.txt&args=..\LICENSE
-#Macro: Title, Prerelease folder, ide://run?file=%WINDIR%\SysWOW64\explorer.exe&Args=%PROJECT%\..\prerelease
-#Macro: Title, Copy to AddLibs, ide://run?file=%COMSPEC%&args=/c&args=copy&args=%PROJECT%\..\prerelease\*.b4xlib&args=%ADDITIONAL%\..\B4X
+#Macro: Title, Update Manifest, ide://run?file=%ADDITIONAL%\..\B4X\manifest-writer.jar&Args=%PROJECT%&Args=%PROJECT%&Args=Author&Args=Aeric&Args=Version&Args=0.60
+#Macro: Title, Create B4xLib, ide://run?file=%JAVABIN%\jar.exe&WorkingDirectory=..&args=-cMf&args=..\release\%PROJECT_NAME%.b4xlib&args=Snippets&args=*.bas&args=manifest.txt&args=..\LICENSE
+#Macro: Title, Release folder, ide://run?file=%WINDIR%\SysWOW64\explorer.exe&Args=%PROJECT%\..\release
+#Macro: Title, Copy to AddLibs, ide://run?file=%COMSPEC%&args=/c&args=copy&args=%PROJECT%\..\release\*.b4xlib&args=%ADDITIONAL%\..\B4X
+'#Macro: Title, Create B4xLib, ide://run?file=%JAVABIN%\jar.exe&WorkingDirectory=..&args=-cMf&args=..\prerelease\%PROJECT_NAME%.b4xlib&args=Snippets&args=*.bas&args=manifest.txt&args=..\LICENSE
+'#Macro: Title, Prerelease folder, ide://run?file=%WINDIR%\SysWOW64\explorer.exe&Args=%PROJECT%\..\prerelease
+'#Macro: Title, Copy to AddLibs, ide://run?file=%COMSPEC%&args=/c&args=copy&args=%PROJECT%\..\prerelease\*.b4xlib&args=%ADDITIONAL%\..\B4X
 #End Region
 
 Sub Process_Globals
-	Private jsGen As MiniJs
+	Private jsGen As MiniJS
 End Sub
 
 Sub AppStart (Args() As String)
