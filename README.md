@@ -238,7 +238,7 @@ See [LICENSE](LICENSE) file for details.
 
 ## Author
 
-**Aeric** - [GitHub](https://github.com/Aeric)
+**Aeric Poon** - [GitHub](https://github.com/pyhoon)
 
 ## Version History
 
